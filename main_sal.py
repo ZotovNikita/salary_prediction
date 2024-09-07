@@ -166,9 +166,6 @@ def pipeline_factory():
         df5 = df4.drop(columns=text)
         df = pd.concat([pd.DataFrame(concated_embs), df5], axis=1)
 
-        if 'salary' in df.columns:
-            df = df.drop(columns=['salary'])
-
         df.columns = df.columns.astype(str)
 
         pred = cat_.predict(df)
@@ -183,7 +180,8 @@ def main(
     output_path: Path,
 ) -> None:
     df = pd.read_csv(test_path, encoding='utf-8', sep=',', low_memory=False)
-    df = df.drop(columns=['salary'])
+    if 'salary' in df.columns:
+        df = df.drop(columns=['salary'])
     pipeline = pipeline_factory()
 
     data = []

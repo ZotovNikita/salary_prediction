@@ -15,10 +15,12 @@ warnings.filterwarnings('ignore')
 
 def pipeline_factory():  # функция, которая вернет пайплайн с предобработкой данных и предсказанием зп
     # разные параметры для предобработки
+
     column_42 = 'required_drive_license'
     column_75 = 'languageKnowledge'
     column_76 = 'hardSkills'
     column_77 = 'softSkills'
+    # колонки, не представляющие значимой ценности (например, все с одинаковым значением или все None)
     # useless_column_id = [0, 12, 14, 15, 17, 49, 50, 57, 58, 59, 60, 72, 73, 74]
     useless_columns = [
         'id', 'code_profession', 'company_code', 'contact_person', 'data_ids',
@@ -41,6 +43,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
     # numeric = ['required_experience', 'salary', 'vacancy_address_latitude', 'vacancy_address_longitude', 'work_places']
     # boolean = 'accommodation_capability need_medcard'.split(' ')
     # categorical = 'busy_type code_professional_sphere education regionName company_business_size schedule_type professionalSphereName federalDistrictCode '.split(' ')
+    # колонки, используемые для получения эмбеддингов
     text = 'ss hs additional_requirements other_vacancy_benefit position_requirements position_responsibilities vacancy_benefit_ids vacancy_name languages'.split(' ')
 
     df4__code_professional_sphere__mode = 'Education'
@@ -68,7 +71,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
     # cat_features=[1025, 1026, 1027, 1029, 1030, 1033-1, 1037-1]
 
     cat_ = CatBoostRegressor()
-    cat_.load_model('./catboost_sal/cat_salary_model')
+    cat_.load_model('./catboost_sal/cat_salary_model')  # модель, весь процесс обучения в файле notebook_salary.ipynb
 
     def language_transform(value: str) -> str:
         res = []

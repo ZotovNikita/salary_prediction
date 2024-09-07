@@ -13,7 +13,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def pipeline_factory():
+def pipeline_factory():  # функция, которая вернет пайплайн с предобработкой данных и предсказанием зп
+    # разные параметры для предобработки
     column_42 = 'required_drive_license'
     column_75 = 'languageKnowledge'
     column_76 = 'hardSkills'
@@ -46,8 +47,22 @@ def pipeline_factory():
     df4__required_experience__median = 0.0
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    tokenizer = AutoTokenizer.from_pretrained("ai-forever/sbert_large_mt_nlu_ru")
-    model = AutoModel.from_pretrained("ai-forever/sbert_large_mt_nlu_ru").to(device)
+    
+    tokenize_path = Path('./data/nlp/tokenize')  # путь до модели
+    model_name = 'ai-forever/sbert_large_mt_nlu_ru'  # название модели
+    model_path = Path('./data/nlp/model')
+
+    # Первоначально будет загрузка моделей, потом берутся оффлайн из файла
+    if not (tokenize_path / 'vocab.txt').exists():
+        AutoTokenizer.from_pretrained(model_name).save_pretrained(str(tokenize_path))
+
+    tokenizer = AutoTokenizer.from_pretrained(str(tokenize_path))
+
+    if not (model_path / 'model.safetensors').exists():
+        AutoModel.from_pretrained(model_name).save_pretrained(str(model_path))
+
+    model = AutoModel.from_pretrained(str(model_path)).to(device)
+
     BSIZE = 256
 
     # cat_features=[1025, 1026, 1027, 1029, 1030, 1033-1, 1037-1]

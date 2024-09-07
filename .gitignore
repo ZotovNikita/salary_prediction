@@ -1,1 +1,7 @@
-.vscode/
+.vscode
+venv
+.venv
+env
+.env
+
+data/

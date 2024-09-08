@@ -6,8 +6,8 @@ import joblib
 
 def evaluate_model(test_set):
     # Загрузка обученной модели и векторизатора
-    model = joblib.load('./models_res/logistic_regression_model.pkl')
-    vectorizer = joblib.load('./models_res/tfidf_vectorizer.pkl')
+    model = joblib.load('./models/logistic_regression_model.pkl')
+    vectorizer = joblib.load('./models/tfidf_vectorizer.pkl')
 
     # Преобразование тестовых данных
     test_set['demands'] = test_set['demands'].fillna('')

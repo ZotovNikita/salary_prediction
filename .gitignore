@@ -5,3 +5,5 @@ env
 .env
 
 data/
+!models/
+models/*

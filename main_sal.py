@@ -71,7 +71,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
     # cat_features=[1025, 1026, 1027, 1029, 1030, 1033-1, 1037-1]
 
     cat_ = CatBoostRegressor()
-    cat_.load_model('./catboost_sal/cat_salary_model_700k')  # модель, весь процесс обучения в файле notebook_salary.ipynb
+    cat_.load_model('./catboost_sal/cat_salary_model')  # модель, весь процесс обучения в файле notebook_salary.ipynb
 
     def language_transform(value: str) -> str:
         res = []
@@ -123,7 +123,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
         return sentence_embeddings.cpu()
 
     def pipeline(df: pd.DataFrame) -> float:
-        df1 = df.drop(columns=useless_columns)
+        df1 = df.drop(columns=useless_columns, errors='ignore')
         # columns = df.columns
 
         df1['car_A'] = df1[column_42].str.contains('A')
@@ -178,7 +178,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
             embs.append(get_embedding(data_embs[i:i + BSIZE]))
 
         if len(embs) == 0:
-            return None
+            return 32000
         concated_embs = torch.concatenate(embs)
 
         df5 = df4.drop(columns=text)
@@ -207,8 +207,6 @@ def main(
     try:
         for i, row in tqdm(df.iterrows()):
             salary = pipeline(pd.DataFrame([row]))
-            if salary is None:
-                continue
 
             data.append({
                 'id': row['id'],

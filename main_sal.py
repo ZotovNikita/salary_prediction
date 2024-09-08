@@ -21,13 +21,11 @@ def pipeline_factory():  # функция, которая вернет пайп�
     column_76 = 'hardSkills'
     column_77 = 'softSkills'
     # колонки, не представляющие значимой ценности (например, все с одинаковым значением или все None)
-    # useless_column_id = [0, 12, 14, 15, 17, 49, 50, 57, 58, 59, 60, 72, 73, 74]
     useless_columns = [
         'id', 'code_profession', 'company_code', 'contact_person', 'data_ids',
         'salary_min', 'salary_max', 'vacancy_address_additional_info', 'vacancy_address',
         'vacancy_address_code', 'vacancy_address_house', 'full_company_name', 'company_inn', 'company',
     ]
-    # problems = [42, 75, 76, 77]
     df4_drop_cols = [
         'academic_degree', 'accommodation_type', 'additional_premium', 
         'bonus_type', 'measure_type', 'career_perspective', 'change_time', 
@@ -40,9 +38,6 @@ def pipeline_factory():  # функция, которая вернет пайп�
         'source_type', 'state_region_code', 'status', 'transport_compensation', 'visibility',
         'contactList', 'company_name',
     ]
-    # numeric = ['required_experience', 'salary', 'vacancy_address_latitude', 'vacancy_address_longitude', 'work_places']
-    # boolean = 'accommodation_capability need_medcard'.split(' ')
-    # categorical = 'busy_type code_professional_sphere education regionName company_business_size schedule_type professionalSphereName federalDistrictCode '.split(' ')
     # колонки, используемые для получения эмбеддингов
     text = 'ss hs additional_requirements other_vacancy_benefit position_requirements position_responsibilities vacancy_benefit_ids vacancy_name languages'.split(' ')
 
@@ -104,6 +99,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
         return sum_embeddings / sum_mask
 
     def get_embedding(sentences: list[str]) -> torch.Tensor:
+        # Функция для получения эмбеддинга предложений
         encoded_input = tokenizer(
             sentences, 
             padding=True, 
@@ -111,20 +107,19 @@ def pipeline_factory():  # функция, которая вернет пайп�
             max_length=128, 
             return_tensors='pt',
         )
-        
+
         input_ids = encoded_input['input_ids'].to(device)
         token_type_ids = encoded_input['token_type_ids'].to(device)
         attention_mask = encoded_input['attention_mask'].to(device)
-        
+
         with torch.no_grad():
             model_output = model(input_ids=input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
-            
+
         sentence_embeddings = mean_pooling(model_output, encoded_input['attention_mask'].to(device))
         return sentence_embeddings.cpu()
 
     def pipeline(df: pd.DataFrame) -> float:
         df1 = df.drop(columns=useless_columns, errors='ignore')
-        # columns = df.columns
 
         df1['car_A'] = df1[column_42].str.contains('A')
         df1['car_B'] = df1[column_42].str.contains('B')

@@ -71,7 +71,7 @@ def pipeline_factory():  # функция, которая вернет пайп�
     # cat_features=[1025, 1026, 1027, 1029, 1030, 1033-1, 1037-1]
 
     cat_ = CatBoostRegressor()
-    cat_.load_model('./catboost_sal/cat_salary_model')  # модель, весь процесс обучения в файле notebook_salary.ipynb
+    cat_.load_model('./catboost_sal/cat_salary_model_700k')  # модель, весь процесс обучения в файле notebook_salary.ipynb
 
     def language_transform(value: str) -> str:
         res = []

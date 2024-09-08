@@ -15,6 +15,10 @@ https://drive.google.com/drive/folders/16MGpN3iPvVTNc8WgP9xnE8gQp9xdxlWF?usp=sha
 или
 `python ./main_res.py -i path/to/test.csv -o ./submission.csv`
 
+В них указываются два параметра: `-i` - путь до csv файла с входными данными и `-o` - путь до выходного файла, в котором будет результат скрипта.
+
+Для склейки результатов двух задач можно с помощью файла `prepare_for_send.ipynb`.
+
 ## unification_task
 
 Для запуска кода необходимо иметь установленный python v 3.8+, файл с данными JOB_LIST.csv
